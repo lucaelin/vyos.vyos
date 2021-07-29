@@ -58,14 +58,18 @@ options:
   match:
     description:
     - The C(match) argument controls the method used to match against the current
-      active configuration.  By default, the desired config is matched against the
-      active config and the deltas are loaded.  If the C(match) argument is set to
-      C(none) the active configuration is ignored and the configuration is always
-      loaded.
+      active configuration. By default, the configuration commands config are
+      matched against the active config and the deltas are loaded line by line.
+      If the C(match) argument is set to C(none) the active configuration is ignored
+      and the configuration is always loaded. If the C(match) argument is set to C(smart)
+      both the active configuration and the target configuration are simlulated
+      and the results compared to bring the target device into a reliable and
+      reproducable state.
     type: str
     default: line
     choices:
     - line
+    - smart
     - none
   backup:
     description:
@@ -158,6 +162,7 @@ EXAMPLES = """
 
 - name: render a Jinja2 template onto the VyOS router
   vyos.vyos.vyos_config:
+    match: smart
     src: vyos_template.j2
 
 - name: revert after ten minutes, if connection is lost
@@ -359,7 +364,7 @@ def main():
     argument_spec = dict(
         src=dict(type="path"),
         lines=dict(type="list", elements="str"),
-        match=dict(default="line", choices=["line", "none"]),
+        match=dict(default="line", choices=["line", "smart", "none"]),
         comment=dict(default=DEFAULT_COMMENT),
         confirm=dict(choices=["automatic", "manual", "none"], default='none'),
         confirm_timeout=dict(type="int", default=10),
