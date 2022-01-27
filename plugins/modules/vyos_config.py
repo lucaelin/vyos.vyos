@@ -234,9 +234,7 @@ from ansible_collections.vyos.vyos.plugins.module_utils.network.vyos.vyos import
 
 DEFAULT_COMMENT = "configured by vyos_config"
 
-CONFIG_FILTERS = [
-    re.compile(r"set system login user \S+ authentication encrypted-password")
-]
+CONFIG_FILTERS = []
 
 
 def get_candidate(module):
